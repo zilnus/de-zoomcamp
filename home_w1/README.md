@@ -37,7 +37,27 @@ FROM public.green_taxi_data
 WHERE trip_distance < 100.0000
 GROUP BY lpep_pickup_datetime::date
 ORDER BY ROUND(CAST(SUM(trip_distance) AS numeric),2) DESC
+LIMIT 1
 ~~~
+
+## Question 5. Biggest pickup zone
+
+Which was the pickup zone with the largest `total_amount` (sum of all trips) on November 18th, 2025?
+
+~~~
+SELECT "PULocationID",
+       "Zone",
+       SUM(total_amount) AS total
+FROM public.green_taxi_data
+LEFT JOIN public.taxi_zone_lookup
+ON "PULocationID" = "LocationID"
+WHERE lpep_pickup_datetime::date = '2025-11-18'
+GROUP BY "PULocationID","Zone"
+ORDER BY SUM(total_amount) DESC
+LIMIT 1
+~~~
+
+
 
 
 
