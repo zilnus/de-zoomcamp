@@ -57,6 +57,29 @@ ORDER BY SUM(total_amount) DESC
 LIMIT 1
 ~~~
 
+## Question 6. Largest tip
+
+For the passengers picked up in the zone named "East Harlem North" in November 2025, which was the drop off zone that had the largest tip?
+
+~~~
+SELECT "DOLocationID",
+       "Zone",
+       SUM(tip_amount) AS total_tip
+FROM public.green_taxi_data
+LEFT JOIN public.taxi_zone_lookup
+ON "DOLocationID" = "LocationID"
+WHERE EXTRACT(YEAR  FROM lpep_pickup_datetime) = '2025' 
+  AND EXTRACT(MONTH FROM lpep_pickup_datetime) = '11'
+  AND "PULocationID" IN (
+	SELECT "LocationID"
+	FROM public.taxi_zone_lookup
+	WHERE "Zone" = 'East Harlem North'
+)
+GROUP BY "DOLocationID", "Zone"
+ORDER BY SUM(tip_amount) DESC
+~~~
+
+
 
 
 
