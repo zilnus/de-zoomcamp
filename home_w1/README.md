@@ -32,11 +32,11 @@ Which was the pick up day with the longest trip distance? Only consider trips wi
 
 ~~~
 SELECT lpep_pickup_datetime::date AS pickup_date,
-       ROUND(CAST(SUM(trip_distance) AS numeric),2) AS total_dist
+       ROUND(CAST(MAX(trip_distance) AS numeric),2) AS total_dist
 FROM public.green_taxi_data
 WHERE trip_distance < 100.0000
 GROUP BY lpep_pickup_datetime::date
-ORDER BY ROUND(CAST(SUM(trip_distance) AS numeric),2) DESC
+ORDER BY ROUND(CAST(MAX(trip_distance) AS numeric),2) DESC
 LIMIT 1
 ~~~
 
@@ -64,7 +64,7 @@ For the passengers picked up in the zone named "East Harlem North" in November 2
 ~~~
 SELECT "DOLocationID",
        "Zone",
-       SUM(tip_amount) AS total_tip
+       MAX(tip_amount) AS total_tip
 FROM public.green_taxi_data
 LEFT JOIN public.taxi_zone_lookup
 ON "DOLocationID" = "LocationID"
@@ -76,8 +76,10 @@ WHERE EXTRACT(YEAR  FROM lpep_pickup_datetime) = '2025'
 	WHERE "Zone" = 'East Harlem North'
 )
 GROUP BY "DOLocationID", "Zone"
-ORDER BY SUM(tip_amount) DESC
+ORDER BY MAX(tip_amount) DESC
+LIMIT 1
 ~~~
+
 
 
 
