@@ -10,3 +10,5 @@ vendors AS (
 )
 
 SELECT * FROM vendors
+
+
